@@ -71,14 +71,9 @@ class ProductController extends Controller
      */
     public function update(EditRequest $request, EditAction $action,string $id)
     {
-        $product=Product::find($id);
-     
-        $product->update([
-            
-        ]);
-
-
-        
+        $product=Product::find($id);     
+        $action->execute($product,collect($request->validated()));    
+       
     }
 
     /**

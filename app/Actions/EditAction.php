@@ -7,15 +7,16 @@ use illuminate\Support\Collection;
 
 class EditAction
 {
-   public function execute(Collection $collection)
+   public function execute(Product $products,Collection $collection)
    {
 
-    Product::where('id',$collection->get('id'))->update([
+    $products->where('id',$collection->get('id'))->update([
     'name'=>$collection->get('name'),
     'price'=>$collection->get('price'),
     'description'=>$collection->get('description'),
     'image'=>$collection->get('image')->store('storage','public'),
-    
+     
+
      
     ]);
    return true;   
