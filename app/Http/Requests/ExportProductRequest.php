@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class ExportProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -21,13 +21,12 @@ class EditRequest extends FormRequest
      */
     public function rules(): array
     {
-        
         return [
-           'name'=>'required',
+            'name'=>'required',
             'price'=>'required',
-           'description'=>'required',           
-           'image'=>'nullable',
+            'description'=>'required',
+            
+
         ];
-        
     }
 }

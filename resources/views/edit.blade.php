@@ -12,10 +12,11 @@
 
 <div class="container">
  
-  <form action="{{route('update',($product->id))}}" method="post" enctype="multipart/form-data">
+  <form action="{{route('update',['product'=>$product->id])}}" method="post" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     
-   <input type="hidden" name="id" value="{{$product->id}}">
+   <!-- <input type="hidden" name="id" value="{{$product->id}}"> -->
     <div class="form-group">
       <label for="name">name</label>
       <input type="text" class="form-control" value="{{$product->name}}" id="name"  name="name">
@@ -34,8 +35,8 @@
       
     <input type="file" class="form-control" name='image'  id="customFile" />
     <img height="40"  src="{{asset('storage/'.$product->image)}}">  
-<!-- <a href="{{asset('storage/'.$product->image)}}"  target="_blank" rel="noopener noreferrer">view uploaded image</a> -->
-    </div>
+<!-- <a href="{{asset('storage/'.$product->image)}}"  target="_blank" rel="noopener noreferrer">view uploaded image</a>  -->
+     </div> 
    
     <button type="submit" class="btn btn-default">update</button>    
     

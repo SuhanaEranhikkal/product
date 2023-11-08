@@ -6,7 +6,10 @@ use App\Http\Requests\EditRequest;
 use App\Actions\MyAction;
 use App\Actions\EditAction;
 use App\Models\Product;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductExport;
+// use App\Http\Requests\ProductExportRequest;
+use PDF;
 
 use Illuminate\Http\Request;
 
@@ -37,14 +40,8 @@ class ProductController extends Controller
     {
         
         $Datavalidated=$action->execute(collect($request->validated()));
-
-        if($Datavalidated)
-        {
-            die('added successfully');
-        }
-        else{
-            die('something wrong');
-        }
+        return redirect()->route('list')->with('message','added successfully');
+       
         
 
     }
@@ -60,31 +57,44 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        $product=Product::find($id);
-       return view('edit',compact('product'));
+      return view('edit',compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditRequest $request, EditAction $action,string $id)
+    public function update(EditRequest $request, EditAction $action,Product $product)
     {
-        $product=Product::find($id);     
-        $action->execute($product,collect($request->validated()));    
        
+        $Datavalidated=$action->execute(collect($request->validated()),$product);
+        if($Datavalidated)
+        {
+            return redirect()->route('list')->with('success','updated successfully');
+        }
+        else{
+            return redirect()->back()->with('message','something went wrong');
+        }
+      
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect()->back();
     }
-    // public function view_product()
-    // {
-    //     return view('')
-    // }
+    public function excel_export()
+    {
+        return Excel::download(new ProductExport,'products.xlsx');
+    }
+    public function pdf_export(){
+
+        // $product=Product::select();
+        $pdf = PDF::loadView('pdfview');
+        return $pdf->stream('products.pdf');
+    }
 }

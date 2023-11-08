@@ -1,30 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>demo</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-@if (\Session::has('message'))
-    <div class="alert alert-success">
-       <p>{{ \Session::get('message') }}</p>
-    </div>
-@endif
-@if (\Session::has('success'))
-    <div class="alert alert-success">
-       <p>{{ \Session::get('success') }}</p>
-    </div>
-@endif
-<div class="container">
-<a href="{{ route('export_excel') }}" class="btn btn-primary"> Excel export </a>
-<a href="" class="btn btn-primary"> Pdf export</a>
-      
-            
-<a href="{{route('create')}}" class="btn btn-primary">add product</a>
 <table class="table">
   <thead>
     
@@ -62,7 +35,3 @@
     @endforeach
   </tbody>
 </table>
-</div>
-
-</body>
-</html>

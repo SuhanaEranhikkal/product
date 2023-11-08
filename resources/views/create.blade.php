@@ -11,24 +11,25 @@
 <body>
 
 <div class="container">
- 
+
   <form action="{{route('store')}}" method="post" enctype="multipart/form-data">
     @csrf
+
     <div class="form-group">
       <label for="name">name</label>
-      <input type="text" class="form-control" id="name"  name="name">
+      <input type="text" class="form-control" value="{{old('name')}}"id="name"  name="name">
     </div>
     <div class="form-group">
       <label for="price">price</label>
-      <input type="text" class="form-control" id="price"  name="price">
+      <input type="text" class="form-control" value="{{old('price')}}"id="price"  name="price">
     </div>
     <div class="form-group">
       <label for="description">description</label>
-      <input type="text" class="form-control" id="description"  name="description">
+      <input type="text" class="form-control"value="{{old('description')}}" id="description"  name="description">
     </div>
     <div>
     <label class="form-label" for="customFile">upload file</label>
-    <input type="file" class="form-control" name='image' id="customFile" />
+    <input type="file" class="form-control" value="{{old('image')}}"name='image' id="customFile" />
 
     </div>
    
