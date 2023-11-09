@@ -9,6 +9,7 @@ use App\Models\Product;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductExport;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use DataTables;
  use App\Http\Requests\ProductExportRequest;
 
 
@@ -19,11 +20,28 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         
-;        $products=Product::all();
-        return view('index',compact('products'));
+        if ($request->ajax()) {
+            $row = Product::all();
+     
+            return DataTables::of($row)
+                ->addIndexColumn()
+               
+                ->addColumn('action', function($row){
+                    return view('actions',['row'=>$row]);
+                })
+                ->addColumn('image',function($row){
+                    return view('imageshow',['row'=>$row]);
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('index');
+        // $products=Product::all();
+        // return view('index',compact('products'));
     }
 
     /**
@@ -41,10 +59,8 @@ class ProductController extends Controller
     {
         
         $Datavalidated=$action->execute(collect($request->validated()));
-        return redirect()->route('list')->with('message','added successfully');
-       
+        return redirect()->route('products.index')->with('message','added successfully');      
         
-
     }
 
     /**
@@ -72,7 +88,7 @@ class ProductController extends Controller
         $Datavalidated=$action->execute(collect($request->validated()),$product);
         if($Datavalidated)
         {
-            return redirect()->route('list')->with('success','updated successfully');
+            return redirect()->route('products.index')->with('success','updated successfully');
         }
         else{
             return redirect()->back()->with('message','something went wrong');
@@ -95,8 +111,7 @@ class ProductController extends Controller
     public function pdf_export(){
        
         
-        $products=Product::all();
-        
+        $products=Product::all();        
         $pdf = PDF::loadView('pdf.products', ['products' => $products]);
         return $pdf->download('products.pdf');
 
