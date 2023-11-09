@@ -1,3 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
 <table class="table">
   <thead>
     
@@ -22,16 +36,12 @@
       <td>
       <img height="40"  src="{{asset('storage/'.$product->image)}}">  
       </td>
-      <td>
-        <a href="{{route('product_edit',['product'=>$product->id])}}" class="btn btn-primary">edit</a>
-        <form style="display:inline" action="{{route('delete',['product'=>$product->id])}}" method="post">   
-          
-          @csrf       
-          @method('DELETE')
-        <button onclick="return confirm('do you want to delete?')" type="submit" class="btn btn-danger">delete</button>
-      </form>
-      </td>
+      
     </tr>
     @endforeach
   </tbody>
 </table>
+</div>
+
+</body>
+</html>

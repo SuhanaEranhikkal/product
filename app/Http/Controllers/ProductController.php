@@ -8,8 +8,9 @@ use App\Actions\EditAction;
 use App\Models\Product;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductExport;
-// use App\Http\Requests\ProductExportRequest;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+ use App\Http\Requests\ProductExportRequest;
+
 
 use Illuminate\Http\Request;
 
@@ -92,9 +93,12 @@ class ProductController extends Controller
         return Excel::download(new ProductExport,'products.xlsx');
     }
     public function pdf_export(){
+       
+        
+        $products=Product::all();
+        
+        $pdf = PDF::loadView('pdf.products', ['products' => $products]);
+        return $pdf->download('products.pdf');
 
-        // $product=Product::select();
-        $pdf = PDF::loadView('pdfview');
-        return $pdf->stream('products.pdf');
     }
 }

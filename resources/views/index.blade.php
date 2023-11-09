@@ -21,9 +21,9 @@
 @endif
 <div class="container">
 <a href="{{ route('export_excel') }}" class="btn btn-primary"> Excel export </a>
-<a href="" class="btn btn-primary"> Pdf export</a>
+<a href="{{route('export_pdf')}}" class="btn btn-primary"> Pdf export</a>
       
-            
+<!-- <a href="{{route('export_pdf')}}" class="btn btn-primary">view pdf</a>             -->
 <a href="{{route('create')}}" class="btn btn-primary">add product</a>
 <table class="table">
   <thead>
