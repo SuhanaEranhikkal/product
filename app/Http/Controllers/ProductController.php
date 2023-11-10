@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\EditRequest;
 use App\Actions\MyAction;
@@ -10,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductExport;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use DataTables;
- use App\Http\Requests\ProductExportRequest;
+use App\Http\Requests\ProductExportRequest;
 
 
 use Illuminate\Http\Request;
@@ -22,18 +23,27 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         if ($request->ajax()) {
-            $row = Product::all();
-     
+            $row = Product::orderby('id', 'desc');
+            $searchname = $request->searchname;
+            $searchprice = $request->searchprice;
+
+            $row->when($searchname, function ($q, $searchname) {
+                return $q->where('name', 'like', '%' . $searchname . '%');
+            });
+
+            $row->when($searchprice, function ($q, $searchprice) {
+                return $q->where('price', 'like', '%' . $searchprice . '%');
+            });
             return DataTables::of($row)
-                ->addIndexColumn()
-               
-                ->addColumn('action', function($row){
-                    return view('actions',['row'=>$row]);
+                // ->addIndexColumn()
+
+                ->addColumn('action', function ($row) {
+                    return view('actions', ['row' => $row]);
                 })
-                ->addColumn('image',function($row){
-                    return view('imageshow',['row'=>$row]);
+                ->addColumn('image', function ($row) {
+                    return view('imageshow', ['row' => $row]);
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -57,10 +67,9 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request, MyAction $action)
     {
-        
-        $Datavalidated=$action->execute(collect($request->validated()));
-        return redirect()->route('products.index')->with('message','added successfully');      
-        
+
+        $Datavalidated = $action->execute(collect($request->validated()));
+        return redirect()->route('products.index')->with('message', 'added successfully');
     }
 
     /**
@@ -76,24 +85,21 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-      return view('edit',compact('product'));
+        return view('edit', compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditRequest $request, EditAction $action,Product $product)
+    public function update(EditRequest $request, EditAction $action, Product $product)
     {
-       
-        $Datavalidated=$action->execute(collect($request->validated()),$product);
-        if($Datavalidated)
-        {
-            return redirect()->route('products.index')->with('success','updated successfully');
+
+        $Datavalidated = $action->execute(collect($request->validated()), $product);
+        if ($Datavalidated) {
+            return redirect()->route('products.index')->with('success', 'updated successfully');
+        } else {
+            return redirect()->back()->with('message', 'something went wrong');
         }
-        else{
-            return redirect()->back()->with('message','something went wrong');
-        }
-      
     }
 
     /**
@@ -104,16 +110,36 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->back();
     }
-    public function excel_export()
+    public function excel_export(Request $rq)
     {
-        return Excel::download(new ProductExport,'products.xlsx');
+        if ($rq->export == 'excel') {
+            
+            return Excel::download(new ProductExport(), 'products.xlsx',compact('lists'));
+        }
+        if ($rq->export == 'pdf') {
+            $products = Product::orderby('id', 'desc');
+            $searchname = $rq->searchname;
+            $searchprice = $rq->searchprice;
+
+            $products->when($searchname, function ($q, $searchname) {
+                return $q->where('name', 'like', '%' . $searchname . '%');
+            });
+
+            $products->when($searchprice, function ($q, $searchprice) {
+                return $q->where('price', 'like', '%' . $searchprice . '%');
+            });
+            $lists=$products->get();
+            
+            $pdf = PDF::loadView('pdf.products', ['lists' => $lists]);
+            return $pdf->download('products.pdf');
+        }
     }
-    public function pdf_export(){
-       
-        
-        $products=Product::all();        
+    public function pdf_export()
+    {
+
+
+        $products = Product::all();
         $pdf = PDF::loadView('pdf.products', ['products' => $products]);
         return $pdf->download('products.pdf');
-
     }
 }

@@ -16,17 +16,17 @@
     </tr>
   </thead>
   <tbody>
-    @foreach($products as $product)
+    @foreach($lists as $list)
    
     
     <tr>
       <td>{{$loop->iteration}}</td>
-      <td>{{$product->name}}</td>
-      <td>{{$product->price}}</td>
-      <td>{{$product->description}}</td>
+      <td>{{$list->name}}</td>
+      <td>{{$list->price}}</td>
+      <td>{{$list->description}}</td>
       <td>
-      <!-- <img height="40"  src="{{asset('storage/'.$product->image)}}">   -->
-      <img height="40"  src="storage/{{$product->image}}">
+ 
+      <img height="40"  src="storage/{{$list->image}}">
       </td>
       
     </tr>
