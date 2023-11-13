@@ -28,15 +28,10 @@
   @endif
   <div class="container">
     <form action="{{ route('export_excel') }}" method="get">
-    <button  class="btn btn-primary" name="export" value="excel"> Excel export </button>
+    <button class="btn btn-primary" name="export" value="excel"> Excel export </button>
     <button  class="btn btn-primary" name="export" value="pdf"> Pdf export </button>
-
-
     
-    <!-- <a href="{{ route('export_excel') }}" class="btn btn-primary"> Excel export </a> -->
-    <!-- <a href="{{route('export_pdf')}}" class="btn btn-primary"> Pdf export</a> -->
 
-    <!-- <a href="{{route('export_pdf')}}" class="btn btn-primary">view pdf</a>             -->
     <a href="{{route('products.create')}}" class="btn btn-primary">add product</a>
     <div class="col-md-6 mt-2 input-group mb-3">
       <input type="text" class="form-control" id="searchname" name="searchname" placeholder="name" aria-describedby="basic-addon2">
@@ -58,7 +53,9 @@
         <th scope="col">price</th>
         <th scope="col">description</th>
         <th scope="col">image</th>
+        <th scope="col">status</th>
         <th scope="col">action</th>
+
       </tr>
     </thead>
 
@@ -82,7 +79,7 @@
 
       columns: [
         // {data: 'DT_RowIndex'},
-        {
+        {  
           data: 'name',
           name: 'name'
         },

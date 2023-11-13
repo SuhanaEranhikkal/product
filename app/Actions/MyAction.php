@@ -1,6 +1,6 @@
 <?php
 namespace App\Actions;
-use App\Models\Product;
+use App\Models\Product; 
 
 use illuminate\Support\Collection;
 

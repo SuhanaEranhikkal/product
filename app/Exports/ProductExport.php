@@ -3,10 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Product;
-use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Events\AfterSheet;
+
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -15,6 +12,14 @@ class ProductExport implements FromCollection,WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
+    protected $lists;
+    function __construct($lists) 
+    {
+        $this->lists=$lists;
+    }
+    public function collection() {
+        return $this->lists;
+      }
 
     public function headings():array
     {
@@ -25,9 +30,7 @@ class ProductExport implements FromCollection,WithHeadings
             'desription'
         ];
     }
-    public function collection()
-    {
-        
-        return Product::select('id', 'name', 'price', 'description')->get();
-    }
+
+   
+    
 }

@@ -26,7 +26,7 @@
       <td>{{$list->description}}</td>
       <td>
  
-      <img height="40"  src="storage/{{$list->image}}">
+      <img height="40"  src="storage{{$list->image}}">
       </td>
       
     </tr>

@@ -67,8 +67,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request, MyAction $action)
     {
-
-        $Datavalidated = $action->execute(collect($request->validated()));
+        $action->execute(collect($request->validated()));
         return redirect()->route('products.index')->with('message', 'added successfully');
     }
 
@@ -113,8 +112,20 @@ class ProductController extends Controller
     public function excel_export(Request $rq)
     {
         if ($rq->export == 'excel') {
+            $searchname = $rq->searchname;
+            $searchprice = $rq->searchprice;
+            $products=Product::orderby('id','desc');
             
-            return Excel::download(new ProductExport(), 'products.xlsx',compact('lists'));
+            $products->when($searchname, function ($q, $searchname) {
+                return $q->where('name', 'like', '%' . $searchname . '%');
+            });
+
+            $products->when($searchprice, function ($q, $searchprice) {
+                return $q->where('price', 'like', '%' . $searchprice . '%');
+            });
+            $lists=$products->get();
+
+            return Excel::download(new ProductExport($lists), 'products.xlsx',);
         }
         if ($rq->export == 'pdf') {
             $products = Product::orderby('id', 'desc');
@@ -134,12 +145,5 @@ class ProductController extends Controller
             return $pdf->download('products.pdf');
         }
     }
-    public function pdf_export()
-    {
-
-
-        $products = Product::all();
-        $pdf = PDF::loadView('pdf.products', ['products' => $products]);
-        return $pdf->download('products.pdf');
-    }
+    
 }
